@@ -34,7 +34,7 @@ def rects_to_polygons(rects, warn_intersections):
 
 def add_zones_from_rects(zones, rects, color, label, warn_intersections):
     zones.extend([
-        {'polygon': p, 'color': color, 'label':label} \
+        {'Polygon': p, 'Color': color, 'Label':label} \
             for p in rects_to_polygons(rects, warn_intersections)
     ])
 
@@ -43,14 +43,14 @@ def convert_def_to_json(inf, outf, mapindex, color, warn_intersections):
     rgx_parse_ints = compile(r'(-?\d+)')
     rgx_parse_comment = compile(r'^#(.+)$')
 
-    output = { 'mapIndex': mapindex, 'zones': [] }
+    output = { 'MapIndex': mapindex, 'Zones': [] }
     label = 'unnamed'
     rects = []
 
     for line in sys.stdin:
         if m := rgx_parse_comment.match(line):
             if len(rects):
-                add_zones_from_rects(output['zones'], rects, color, label,
+                add_zones_from_rects(output['Zones'], rects, color, label,
                     warn_intersections)
             label = m.group(1).strip()
             rects = []
@@ -62,7 +62,7 @@ def convert_def_to_json(inf, outf, mapindex, color, warn_intersections):
             rects.append(Rect(*six_ints[:4]))
 
     if len(rects):
-        add_zones_from_rects(output['zones'], rects, color, label,
+        add_zones_from_rects(output['Zones'], rects, color, label,
                 warn_intersections)
 
     dump(output, outf, sort_keys=True, indent=4)
